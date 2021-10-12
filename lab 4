@@ -1,0 +1,46 @@
+#include <iostream>
+#include "math.h"
+using namespace std;
+void out_rez(double x,double fun)
+{
+    cout<<"Значение x="<<x<<" Значение функции равно="<<fun<<endl;
+}
+
+int main() {
+
+    double a, b, h, s, x, r, PI, y, sum;
+    int n, k,num;
+    cout << "Введите a,b,h,n" << endl;
+    cin >> a >> b >> h >> n;
+    while(b<a or h<=0)
+    {
+        cout<<"Введите корректные a,b,h"<<endl;
+        cin>>a>>b>>h;
+
+    }
+    PI = acos(-1);
+
+    cout<<"выберите функцию которую хотите посчитать:"<<endl;
+    cout<<"1:S(x),2:Y(x),3:|Y(x)-S(x)|"<<endl;
+    cin>>num;
+    while(num<0 or num>3)
+    {
+        cout<<"Введите корректную функцию"<<endl;
+        cin>>num;
+    }
+    for (x=a; x <= b; x += h) {
+        r = s = 1;
+        for (k = 1; k <= n; k++)
+        {
+
+            r =r*  x /k ;
+            s += r*cos(k*PI/4);
+        }
+        y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
+        sum =  abs(y - s);
+        if (num==1) out_rez(x,s);
+        if (num==2) out_rez(x,y);
+        if (num==3 ) out_rez(x,sum);
+    }
+    return 0;
+}
