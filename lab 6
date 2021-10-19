@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int **a, i, j, n, m, *b, k = 0, nm;
+    cin >> n >> m;
+    nm=n*m;
+    b=new int[nm];
+    a = new int *[n];
+    for (i = 0; i < n; i++)
+        a[i] = new int[m];
+        for (i = 0; i < n; i++)
+            for (j = 0; j < m; j++) {
+                cin >> a[i][j];
+            }
+
+
+
+    for (i = 0; i < n; i++)
+        for (j = 0; j < m; j++) {
+            b[k]=a[i][j];
+            cout<<b[k]<<" ";
+            k++;
+        }
+
+        for (i=0;i<n;i++)
+        {
+            b[i]=1;
+            for(j=0;j<=m/2;j++)
+                if(a[i][j]!=a[i][m-j-1])
+                {
+                    b[i]=0;
+                    break;
+                }
+        }
+        for(i=0; i<n*m; i++) {
+            cout << b[i] << " ";
+        }
+
+    delete []b;
+    delete []a[i];
+   delete []a;
+    return 0;
+}
