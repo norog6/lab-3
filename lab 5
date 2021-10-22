@@ -35,8 +35,12 @@ while (k>2 or k<1)
             cout<<"Положительное число 1,суммы нет"<<endl;
             return 0;
         }
+    cout<<"Ваш массив"<<endl;
         for (i=0;i<num;i++)
-            sum+=a[i];
-        cout<<" Cумма "<<sum<<endl;
+        {
+            cout<<a[i]<<" ";
+            sum += a[i];
+        }
+        cout<<" Cумма "<<sum;
         return 0;
 }
