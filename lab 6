@@ -2,10 +2,11 @@
 #include <ctime>
 using namespace std;
 int main() {
+setlocale(LC_ALL, "Russian");
     int **a, i, j, n, m, *b, k = 0, nm,x,y,var;
     srand(time(NULL));
     do {
-
+        
         cout << "Введите количество строк матрицы" << endl;
         cin >> n;
         cout << "ВВедите количество столбцов матрицы" << endl;
