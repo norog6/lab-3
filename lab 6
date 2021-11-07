@@ -1,76 +1,93 @@
 #include <iostream>
 #include <ctime>
 using namespace std;
+int check_number();
 int main() {
-setlocale(LC_ALL, "Russian");
-    int **a, i, j, n, m, *b, k = 0, nm,x,y,var;
+    setlocale(LC_ALL, "Russian");
+    int** a, i, j,  m, * b, k = 0, nm, x, y, var;
+    int n;
     srand(time(NULL));
     do {
-        
+
         cout << "Введите количество строк матрицы" << endl;
-        cin >> n;
+        n=check_number();
         cout << "ВВедите количество столбцов матрицы" << endl;
-        cin >> m;
-    }
-    while(n<0 or m<0);
-    nm=n*m;
+         m=check_number();
+    } while (n < 0 or m < 0);
+    nm = n * m;
     do {
-        cout<<"Выберите способ заполнения матрицы"<<endl<<"1:вручную,2рандомно:";
-        cin>>var;
-    }
-    while(var>2 or var<1);
-    b=new int[nm];
-    a = new int *[n];
+        cout << "Выберите способ заполнения матрицы" << endl << "1:вручную,2рандомно:";
+        cin >> var;
+    } while (var > 2 or var < 1);
+    b = new int[nm];
+    a = new int* [n];
     for (i = 0; i < n; i++)
         a[i] = new int[m];
-    if(var==1) {
+    if (var == 1)
+    {
         for (i = 0; i < n; i++)
             for (j = 0; j < m; j++) {
-                cin >> a[i][j];
+                a[i][j]=check_number();
             }
     }
-    if (var==2)
+    if (var == 2)
     {
         do {
-            cout<<"Введите верхнюю границу рандома"<<endl;
-            cin>>x;
-            cout<<"Введите нижнюю границу рандома"<<endl;
-            cin>>y;
-        }
-        while(y>=x);
-        for (i=0;i<n;i++)
-            for (j=0;j<m;j++)
-                a[i][j]=rand()%(x-y+1)+y;
+            cout << "Введите верхнюю границу рандома" << endl;
+             x=check_number();
+            cout << "Введите нижнюю границу рандома" << endl;
+             y=check_number();
+        } while (y >= x);
+        for (i = 0; i < n; i++)
+            for (j = 0; j < m; j++)
+                a[i][j] = rand() % (x - y + 1) + y;
     }
     for (i = 0; i < n; i++)
-        for (j = 0; j < m; j++) {
-            b[k]=a[i][j];
+        for (j = 0; j < m; j++) 
+        {
+            b[k] = a[i][j];
 
             k++;
         }
-        for (i=0;i<n;i++)
-        {
-            b[i]=1;
-            for(j=0;j<=m/2;j++)
-                if(a[i][j]!=a[i][m-j-1])
-                {
-                    b[i]=0;
-                    break;
-                }
-        }
-        cout<<"Ваша матрица:";
-        for(i=0;i<n;i++) {
-            cout<<endl;
-            for (j=0;j<m;j++)
-                cout<<a[i][j]<<" ";
-        }
-        cout<<endl<<"Ваш вектор:"<<endl;
-        for(i=0; i<n*m; i++) {
-            cout << b[i] << " ";
-        }
-    delete []b;
-        for(i=0;i<n;i++)
-    delete []a[i];
-   delete []a;
+    for (i = 0; i < n; i++)
+    {
+        b[i] = 1;
+        for (j = 0; j <= m / 2; j++)
+            if (a[i][j] != a[i][m - j - 1])
+            {
+                b[i] = 0;
+                break;
+            }
+    }
+    cout << "Ваша матрица:";
+    for (i = 0; i < n; i++) {
+        cout << endl;
+        for (j = 0; j < m; j++)
+            cout << a[i][j] << " ";
+    }
+    cout << endl << "Ваш вектор:" << endl;
+    for (i = 0; i < n * m; i++) {
+        cout << b[i] << " ";
+    }
+    delete[]b;
+    for (i = 0; i < n; i++)
+        delete[]a[i];
+    delete[]a;
     return 0;
+}
+int check_number()
+{
+    int n;
+    while (true)
+    {
+        cin >> n;
+        if (cin.get() == '\n')
+            return n;
+        else
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Некоректный ввод" << endl;
+        }
+    }
 }
