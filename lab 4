@@ -1,46 +1,73 @@
 #include <iostream>
 #include "math.h"
 using namespace std;
-void out_rez(double x,double fun)
+double calcfX(double x, int n);
+double calcfY(double x);
+double calcfX_Y(double x, int n);
+void out_rez(double x, double fun)
 {
-    cout<<"Значение x="<<x<<" Значение функции равно="<<fun<<endl;
+    cout << "Значение x=" << x << " Значение функции равно=" << fun << endl;
 }
 
 int main() {
-
+    setlocale(LC_ALL, "Russian");
     double a, b, h, s, x, r, PI, y, sum;
-    int n, k,num;
+    int n, k, num;
     cout << "Введите a,b,h,n" << endl;
     cin >> a >> b >> h >> n;
-    while(b<a or h<=0)
+    while (b < a or h <= 0)
     {
-        cout<<"Введите корректные a,b,h"<<endl;
-        cin>>a>>b>>h;
+        cout << "Введите корректные a,b,h" << endl;
+        cin >> a >> b >> h;
 
     }
     PI = acos(-1);
 
-    cout<<"выберите функцию которую хотите посчитать:"<<endl;
-    cout<<"1:S(x),2:Y(x),3:|Y(x)-S(x)|"<<endl;
-    cin>>num;
-    while(num<0 or num>3)
+    cout << "выберите функцию которую хотите посчитать:" << endl;
+    cout << "1:S(x),2:Y(x),3:|Y(x)-S(x)|" << endl;
+    cin >> num;
+    while (num < 0 or num>3)
     {
-        cout<<"Введите корректную функцию"<<endl;
-        cin>>num;
+        cout << "Введите корректную функцию" << endl;
+        cin >> num;
     }
-    for (x=a; x <= b; x += h) {
-        r = s = 1;
-        for (k = 1; k <= n; k++)
-        {
-
-            r =r*  x /k ;
-            s += r*cos(k*PI/4);
-        }
-        y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
-        sum =  abs(y - s);
-        if (num==1) out_rez(x,s);
-        if (num==2) out_rez(x,y);
-        if (num==3 ) out_rez(x,sum);
+    for (x = a; x <= b; x += h) {
+       
+        if (num == 1) out_rez(x, calcfX( x,  n));
+        if (num == 2) out_rez(x,  calcfY( x));
+        if (num == 3) out_rez(x, calcfX_Y( x, n));
     }
     return 0;
+}
+double calcfX(double x, int n)
+{
+    int k;
+    double PI = acos(-1);
+    double r = 1, s = 1;
+    for (k = 1; k <= n; k++)
+    {
+        r = r * x / k;
+        s += r * cos(k * PI / 4);
+    }
+    return s;
+}
+double calcfY(double x)
+{
+    double y,PI;
+    PI = acos(-1);
+    y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
+    return y;
+}
+double calcfX_Y(double x, int n)
+{
+    int k;
+    double PI = acos(-1), y;;
+    double r = 1, s = 1;
+    for (k = 1; k <= n; k++)
+    {
+        r = r * x / k;
+        s += r * cos(k * PI / 4);
+    }
+    y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
+    return abs(s-y);
 }
