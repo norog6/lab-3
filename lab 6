@@ -1,73 +1,92 @@
 #include <iostream>
-#include "math.h"
+#include <ctime>
 using namespace std;
-double calcfX(double x, int n);
-double calcfY(double x);
-double calcfX_Y(double x, int n);
-void out_rez(double x, double fun)
-{
-    cout << "Значение x=" << x << " Значение функции равно=" << fun << endl;
-}
-
+int check_number();
 int main() {
     setlocale(LC_ALL, "Russian");
-    double a, b, h, s, x, r, PI, y, sum;
-    int n, k, num;
-    cout << "Введите a,b,h,n" << endl;
-    cin >> a >> b >> h >> n;
-    while (b < a or h <= 0)
-    {
-        cout << "Введите корректные a,b,h" << endl;
-        cin >> a >> b >> h;
+    int** a, i, j, n, m, * b, k = 0, nm, x, y, var;
+    srand(time(NULL));
+    do {
 
+        cout << "Введите количество строк матрицы" << endl;
+        n=check_number;
+        cout << "ВВедите количество столбцов матрицы" << endl;
+         m=check_number;
+    } while (n < 0 or m < 0);
+    nm = n * m;
+    do {
+        cout << "Выберите способ заполнения матрицы" << endl << "1:вручную,2рандомно:";
+        cin >> var;
+    } while (var > 2 or var < 1);
+    b = new int[nm];
+    a = new int* [n];
+    for (i = 0; i < n; i++)
+        a[i] = new int[m];
+    if (var == 1) {
+        for (i = 0; i < n; i++)
+            for (j = 0; j < m; j++) {
+                 a[i][j]=check_number;
+            }
     }
-    PI = acos(-1);
-
-    cout << "выберите функцию которую хотите посчитать:" << endl;
-    cout << "1:S(x),2:Y(x),3:|Y(x)-S(x)|" << endl;
-    cin >> num;
-    while (num < 0 or num>3)
+    if (var == 2)
     {
-        cout << "Введите корректную функцию" << endl;
-        cin >> num;
+        do {
+            cout << "Введите верхнюю границу рандома" << endl;
+             x=check_number;
+            cout << "Введите нижнюю границу рандома" << endl;
+            y=check_number;
+        } while (y >= x);
+        for (i = 0; i < n; i++)
+            for (j = 0; j < m; j++)
+                a[i][j] = rand() % (x - y + 1) + y;
     }
-    for (x = a; x <= b; x += h) {
-       
-        if (num == 1) out_rez(x, calcfX( x,  n));
-        if (num == 2) out_rez(x,  calcfY( x));
-        if (num == 3) out_rez(x, calcfX_Y( x, n));
+    for (i = 0; i < n; i++)
+        for (j = 0; j < m; j++) {
+            b[k] = a[i][j];
+
+            k++;
+        }
+    for (i = 0; i < n; i++)
+    {
+        b[i] = 1;
+        for (j = 0; j <= m / 2; j++)
+            if (a[i][j] != a[i][m - j - 1])
+            {
+                b[i] = 0;
+                break;
+            }
     }
+    cout << "Ваша матрица:";
+    for (i = 0; i < n; i++) {
+        cout << endl;
+        for (j = 0; j < m; j++)
+            cout << a[i][j] << " ";
+    }
+    cout << endl << "Ваш вектор:" << endl;
+    for (i = 0; i < n * m; i++) {
+        cout << b[i] << " ";
+    }
+    delete[]b;
+    for (i = 0; i < n; i++)
+        delete[]a[i];
+    delete[]a;
     return 0;
 }
-double calcfX(double x, int n)
+int check_number()
 {
-    int k;
-    double PI = acos(-1);
-    double r = 1, s = 1;
-    for (k = 1; k <= n; k++)
+    int n;
+    while (true)
     {
-        r = r * x / k;
-        s += r * cos(k * PI / 4);
+        cin >> n;
+        if (cin.get() == '\n')
+        {
+            return n;
+        }
+        else
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Некоректный ввод" << endl;
+        }
     }
-    return s;
-}
-double calcfY(double x)
-{
-    double y,PI;
-    PI = acos(-1);
-    y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
-    return y;
-}
-double calcfX_Y(double x, int n)
-{
-    int k;
-    double PI = acos(-1), y;;
-    double r = 1, s = 1;
-    for (k = 1; k <= n; k++)
-    {
-        r = r * x / k;
-        s += r * cos(k * PI / 4);
-    }
-    y = exp(x * cos(PI / 4.)) * cos(x * sin(PI / 4));
-    return abs(s-y);
 }
