@@ -1,0 +1,154 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+
+using namespace std;
+
+int check_number()
+{
+    int n;
+    while (true)
+    {
+        cin >> n;
+        if (cin.get() == '\n')
+            return n;
+        else
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Некоректный ввод" << endl;
+        }
+    }
+}
+
+struct student {
+
+    char name[256];
+    int year, group, physics, maths, it, chemistry;
+    double average;
+
+
+    void text() {
+
+
+        cout << name << " " << year << " " << group << " " << physics << " " << maths << " " << it << " " << chemistry
+             << " " << average << endl;
+
+
+    }
+};
+
+
+int main() {
+
+    setlocale(LC_ALL, "RUS");
+
+    ifstream fin("students.txt");
+
+    student students[256];
+
+    cout << "Список студентов: " << endl;
+    int i = 1, last_student = 0,n;
+
+    do {
+
+        student Student;
+
+        fin >> Student.year >> Student.group >> Student.physics >> Student.maths >> Student.it >> Student.chemistry;
+        Student.average = (Student.physics + Student.maths + Student.it + Student.chemistry) / 4.;
+        fin.getline(Student.name, 256);
+
+        if (strcmp(Student.name, "") != 0) {
+
+            students[last_student] = Student;
+            cout << i << ". " << Student.name << endl;
+
+            i++; last_student++;
+
+        }
+
+    } while (!fin.eof());
+
+    fin.close();
+
+    int mode = -1;
+
+    while (mode) {
+
+        cout << "Выберите операцию:\n\t0 - Выход\n\t1 - Создание\n\t2 - Просмотр\n\t3 - Коррекция\n\t4 - Индивидуальное задание\nВаш выбор: ";
+        cin >> mode;
+
+        int number;
+        student Student, blank;
+
+        switch (mode) {
+
+            case 0:
+                cout << "Выход." << endl;
+                break;
+
+            case 1:
+                cout << "Введите имя: ";
+                cin.ignore();
+                cin.getline(Student.name, 256);
+                cout << "Введите год рождения, номер группы, оценки по физике, математике, информатике и химии: ";
+                Student.year=check_number();
+                Student.group=check_number();
+                Student.physics=check_number();
+                Student.maths=check_number();
+                Student.it=check_number();
+                Student.chemistry=check_number();
+                Student.average = (Student.physics + Student.maths + Student.it + Student.chemistry) / 4;
+                students[last_student] = Student;
+                last_student++;
+
+                break;
+
+            case 2:
+                cout << "Введите номер студента из списка: ";
+                do
+                    n=check_number();
+                while(n>last_student or n<0 );
+                {
+                    students[n-1].text();
+                }
+                break;
+
+            case 3:
+                cout << "Введите номер студента из списка: ";
+                do
+                    number=check_number();
+                while(number>last_student or number<0 );
+                cout << "Введите имя: ";
+                cin.ignore();
+                cin.getline(Student.name, 256);
+                cout << "Введите год рождения, номер группы, оценки по физике, математике, информатике и химии: ";
+                Student.year=check_number();
+                Student.group=check_number();
+                Student.physics=check_number();
+                Student.maths=check_number();
+                Student.it=check_number();
+                Student.chemistry=check_number();
+                Student.average = (Student.physics + Student.maths + Student.it + Student.chemistry) / 4;
+                students[number - 1] = Student;
+                break;
+
+            case 4:
+                int group;
+                cout<<"Введите номер группы";
+                group=check_number();
+                for (int i = 0; i < last_student; i++)
+                    if ( students[i].group==group && students[i].physics > 8 && students[i].maths > 8 && students[i].it > 8 && students[i].chemistry > 8  )
+                        students[i].text();
+
+        }
+
+        ofstream fout("students.txt");
+        for (int i = 0; i < last_student; i++)
+            fout << students[i].year << ' ' << students[i].group << ' ' << students[i].physics << ' ' << students[i].maths << ' '
+                 << students[i].it << ' ' << students[i].chemistry << students[i].name << endl;
+        fout.close();
+
+    }
+
+}
